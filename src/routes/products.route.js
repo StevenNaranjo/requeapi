@@ -6,7 +6,7 @@ const router = Router();
 // Rutas para usuarios
 router.get('/usuarios', getUsers);
 router.get('/usuarios/:cedula', getUser);
-router.get('/usuarios/:correo', getUserByEmail);
+router.get('/usuarios/correo/:correo', getUserByEmail);
 router.post('/usuarios', createUser);
 router.put('/usuarios/:correo', updateUser);
 router.delete('/usuarios/:correo', deleteUser);

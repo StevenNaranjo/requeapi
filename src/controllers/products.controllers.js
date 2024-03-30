@@ -4,8 +4,8 @@ import sql from 'mssql'
 export const getUsers = async (req, res) => {
     const pool = await getConnection();
     try {
-        const result = await pool.request().query('select * from usuarios');
-        console.table(result.recordset);
+        const result = await pool.request().query('SELECT * FROM dbo.usuarios');
+        console.log(result.recordset);
         res.json(result.recordset);
     } catch (error) {
         console.error('Error getting users:', error);
