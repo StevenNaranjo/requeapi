@@ -85,8 +85,6 @@ export const loginUser = async (req, res) => {
         const result = await pool.request()
             .input('correo', sql.VarChar, correo)
             .input('contrasnha', sql.VarChar, contrasnha)
-            //.input('correo', sql.VarChar, correo)
-            //.input('contrasnha', sql.VarChar, contrasnha)
             .query('SELECT * FROM usuarios WHERE correo = @correo AND contrasnha = @contrasnha');
 
         if (result.recordset.length > 0) {
