@@ -167,7 +167,7 @@ export const createProject = async (req, res) => {
         .input("presupuesto", sql.Float, req.body.presupuesto)
         .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
         .query("INSERT INTO Proyectos (idProyecto, nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@id_proyecto, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
-        res.send('Creando Proyecto');
+        res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
     }
