@@ -1,5 +1,6 @@
 import { getConnection } from '../database/connection.js'
 import sql from 'mssql'
+import jwt from 'jsonwebtoken'
 
 export const getUsers = async (req, res) => {
     const pool = await getConnection();
@@ -87,9 +88,19 @@ export const loginUser = async (req, res) => {
             .input('contrasnha', sql.VarChar, contrasnha)
             .query('SELECT * FROM usuarios WHERE correo = @correo AND contrasnha = @contrasnha');
 
-        if (result.recordset.length > 0) {
-            // Si las credenciales son válidas, se envía una respuesta exitosa
-            console.log("TODO A MALIDO BIEN")
+            if (result.recordset.length > 0) {
+                const usuario = result.recordset[0]; // Obtener los datos del usuario autenticado
+        
+                // Firmar un token JWT con los datos del usuario
+                const token = jwt.sign({
+                    cedula: usuario.cedula,
+                    correo: usuario.correo,
+                    nombre: usuario.nombre,
+                    departamento: usuario.departamento,
+                    estado: usuario.estado,
+                  // Agrega más información del usuario que desees incluir en el token
+                }, jwtOptions.secretOrKey);
+            res.json({ token });
             res.status(200).json({ message: 'Inicio de sesión exitoso' });
         } else {
             // Si las credenciales son inválidas, se envía un mensaje de error
@@ -139,3 +150,25 @@ export const registerUser = async (req, res) => {
         res.status(500).json({ message: 'Error en el registro' });
     }
 };
+
+export const createProject = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection()
+        const totalproyectos = await pool.request().query('SELECT COUNT(*) AS count FROM Proyectos');
+        const result = await pool
+        .request()
+        .input('id_proyecto', sql.Int, totalproyectos.recordset[0].count)
+        .input('nombre', sql.VarChar, req.body.nombre_proyecto)
+        .input('descripcion', sql.Text, req.body.descripcion)
+        .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
+        .input('estado', sql.Int, 0)
+        .input('ced_responsable', sql.VarChar, req.body.ced_responsable)
+        .input("presupuesto", sql.Float, req.body.presupuesto)
+        .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
+        .query("INSERT INTO Proyectos (idProyecto, nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@id_proyecto, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
+        res.send('Creando Proyecto');
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, deleteUser, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -14,5 +14,5 @@ router.delete('/usuarios/:correo', deleteUser);
 // Rutas para autenticación
 router.post('/login', loginUser);
 router.post('/register', registerUser);
-
+router.post('/createProject', createProject);
 export default router;
