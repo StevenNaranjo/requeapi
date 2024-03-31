@@ -107,9 +107,21 @@ export const loginUser = async (req, res) => {
 export const registerUser = async (req, res) => {
     const { nombre, correo, cedula, telefono, departamento, contrasnha } = req.body;
 
-    // Verifica si el correo y la contraseña coinciden con algún usuario en la base de datos
+    // Verificar si el correo o la cédula ya existen en la base de datos
     const pool = await getConnection();
     try {
+        const checkExistingUser = await pool.request()
+            .input('correo', sql.VarChar, correo)
+            .input('cedula', sql.VarChar, cedula)
+            .query('SELECT COUNT(*) AS count FROM usuarios WHERE correo = @correo OR cedula = @cedula');
+
+        const existingUserCount = checkExistingUser.recordset[0].count;
+
+        if (existingUserCount > 0) {
+            return res.status(400).json({ message: 'El correo o la cédula ya están registrados' });
+        }
+
+        // Si el correo y la cédula no existen, proceder con el registro
         const result = await pool.request()
             .input('nombre', sql.VarChar, nombre)
             .input('correo', sql.VarChar, correo)
@@ -119,10 +131,10 @@ export const registerUser = async (req, res) => {
             .input('contrasnha', sql.VarChar, contrasnha)
             .query('INSERT INTO usuarios (nombre, correo, cedula, telefono, departamento, contrasnha) VALUES (@nombre, @correo, @cedula, @telefono, @departamento, @contrasnha)');
 
-        // Si las credenciales son válidas, se envía una respuesta exitosa
+        // Envía una respuesta exitosa
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
-        // Si ocurre algún error durante la consulta, se envía un mensaje de error
+        // Si ocurre algún error durante la consulta, envía un mensaje de error
         console.error('Error en el registro:', error);
         res.status(500).json({ message: 'Error en el registro' });
     }
