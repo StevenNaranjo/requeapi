@@ -91,6 +91,7 @@
             console.log(data);
             if (data.message === "Inicio de sesión exitoso") {
                 console.log("Login successful");
+                localStorage.setItem('accessTokenUser', response.token);
                 window.location.href = "signinexitoso.html";
                 
             } else {

@@ -88,16 +88,30 @@ export const loginUser = async (req, res) => {
             .input('contrasnha', sql.VarChar, contrasnha)
             .query('SELECT * FROM usuarios WHERE correo = @correo AND contrasnha = @contrasnha');
 
-            if (result.recordset.length > 0) {
-            res.status(200).json({ message: 'Inicio de sesión exitoso' });
+        if (result.recordset.length > 0) {
+            // Si las credenciales son válidas, extrae los valores adicionales de la base de datos
+            const usuario = result.recordset[0];
+            
+            // Construye el payload del token con los valores obtenidos de la base de datos
+            const payload = {
+                correo: usuario.correo,
+                nombre: usuario.nombre,
+                telefono: usuario.telefono,
+                departamento: usuario.departamento,
+                cedula: usuario.cedula
+            };
+
+            // Genera un token JWT con el payload personalizado
+            const token = jwt.sign(payload, 'tu_secreto_secreto'); // 'tu_secreto_secreto' debe ser reemplazado por una cadena secreta segura en producción
+
+            // Envía el token JWT en la respuesta
+            res.status(200).json({ message: 'Inicio de sesión exitoso', token: token });
         } else {
             // Si las credenciales son inválidas, se envía un mensaje de error
-            console.log("TODO A MALIDO SAL PERO BIEN")
             res.status(401).json({ message: 'Correo electrónico o contraseña incorrectos' });
         }
     } catch (error) {
         // Si ocurre algún error durante la consulta, se envía un mensaje de error
-        console.log("TODO A MALIDO SAL")
         console.error('Error en el inicio de sesión:', error);
         res.status(500).json({ message: 'Error en el inicio de sesión' });
     }
@@ -155,6 +169,25 @@ export const createProject = async (req, res) => {
         .input("presupuesto", sql.Float, req.body.presupuesto)
         .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
         .query("INSERT INTO Proyectos (idProyecto, nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@id_proyecto, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+
+export const createMeeting = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection()
+        const totalreuniones = await pool.request().query('SELECT COUNT(*) AS count FROM Reuniones');
+        const result = await pool
+        .request()
+        .input('id_reunion', sql.Int, totalreuniones.recordset[0].count)
+        .input('tema', sql.VarChar, req.body.tema)
+        .input('fecha', sql.DateTime, req.body.fecha)
+        .input('medio', sql.VarChar, req.body.medio)
+        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .query("INSERT INTO Reuniones (idReunion, nombre_reunion, descripcion, fecha, hora, lugar, idProyecto) VALUES (@id_reunion, @nombre, @descripcion, @fecha, @hora, @lugar, @id_proyecto)")
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)

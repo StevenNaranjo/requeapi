@@ -26,5 +26,13 @@
         <p>Tu registro se ha completado con éxito.</p>
         <p>Puedes iniciar sesión <a href="login.html">aquí</a>.</p>
     </div>
+    <script>
+        const data = localStorage.getItem('accessTokenUser')
+        console.log(data)
+        const desc_data = jwt_decode(data);
+        console.log(desc_data)
+        console.log(desc_data.email)
+        console.log(desc_data.nombre)
+    </script>
 </body>
 </html>
