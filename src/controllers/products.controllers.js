@@ -90,17 +90,7 @@ export const loginUser = async (req, res) => {
 
             if (result.recordset.length > 0) {
                 const usuario = result.recordset[0]; // Obtener los datos del usuario autenticado
-        
-                // Firmar un token JWT con los datos del usuario
-                const token = jwt.sign({
-                    cedula: usuario.cedula,
-                    correo: usuario.correo,
-                    nombre: usuario.nombre,
-                    departamento: usuario.departamento,
-                    estado: usuario.estado,
-                  // Agrega más información del usuario que desees incluir en el token
-                }, jwtOptions.secretOrKey);
-            res.json({ token });
+                res.json({ token });
             res.status(200).json({ message: 'Inicio de sesión exitoso' });
         } else {
             // Si las credenciales son inválidas, se envía un mensaje de error
