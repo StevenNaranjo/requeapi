@@ -89,8 +89,6 @@ export const loginUser = async (req, res) => {
             .query('SELECT * FROM usuarios WHERE correo = @correo AND contrasnha = @contrasnha');
 
             if (result.recordset.length > 0) {
-                const usuario = result.recordset[0]; // Obtener los datos del usuario autenticado
-                res.json({ token });
             res.status(200).json({ message: 'Inicio de sesión exitoso' });
         } else {
             // Si las credenciales son inválidas, se envía un mensaje de error
