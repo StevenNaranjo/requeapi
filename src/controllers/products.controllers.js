@@ -70,9 +70,19 @@ export const createUser = async (req, res) => {
     res.send('Creando Usuario');
 }
 
-export const updateUser = (req, res) => {
-    res.send(`Actualizando Usuario ${req.params.correo}`);
+export const updateUser = async (req, res) => {
+    const pool = await getConnection()
+
+    const result = await pool
+    .request()
+    .input('correo', sql.VarChar, req.body.correo)
+    .input('cedula', sql.VarChar, req.body.cedula)
+    .input('telefono', sql.VarChar, req.body.telefono)
+    .input('departamento', sql.VarChar, req.body.departamento)
+    .query("UPDATE usuarios SET correo = @correo, telefono = @telefono, departamento = @departamento WHERE cedula = @cedula");
+    res.status(200).json({message: 'Modificando Usuario'});
 }
+
 export const deleteUser = (req, res) => {
     res.send(`Eliminando Usuario ${req.params.correo}`);
 }
@@ -100,12 +110,8 @@ export const loginUser = async (req, res) => {
                 departamento: usuario.departamento,
                 cedula: usuario.cedula
             };
-
-            // Genera un token JWT con el payload personalizado
-            const token = jwt.sign(payload, 'tu_secreto_secreto'); // 'tu_secreto_secreto' debe ser reemplazado por una cadena secreta segura en producción
-
-            // Envía el token JWT en la respuesta
-            res.status(200).json({ message: 'Inicio de sesión exitoso', token: token });
+            
+            res.status(200).json({ message: 'Inicio de sesión exitoso', payload: payload});
         } else {
             // Si las credenciales son inválidas, se envía un mensaje de error
             res.status(401).json({ message: 'Correo electrónico o contraseña incorrectos' });
@@ -175,6 +181,9 @@ export const createProject = async (req, res) => {
     }
 }
 
+
+
+//falta de terminar, debido a que se debe obtener el id del proyecto
 export const createMeeting = async (req, res) => {
     try {
         console.log(req.body);
@@ -187,7 +196,60 @@ export const createMeeting = async (req, res) => {
         .input('fecha', sql.DateTime, req.body.fecha)
         .input('medio', sql.VarChar, req.body.medio)
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
-        .query("INSERT INTO Reuniones (idReunion, nombre_reunion, descripcion, fecha, hora, lugar, idProyecto) VALUES (@id_reunion, @nombre, @descripcion, @fecha, @hora, @lugar, @id_proyecto)")
+        .query("INSERT INTO Reuniones (id, fecha,nombre,medio, idProyecto) VALUES (@id_reunion, @fecha,@tema, @medio, @id_proyecto)")
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+
+
+export const getProjects = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('cedula', sql.VarChar, req.body.cedula)
+        .query('SELECT P.* FROM proyectos P INNER JOIN colaboradores C ON C.idProyecto = P.idProyecto where c.ced_colaborador = @cedula');
+        const projects = result.recordset;
+        console.log(projects);
+        res.json(projects);
+    } catch (error) {
+        console.log("Error: ",error)  
+    }
+}
+export const updateProject = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .input('nombre', sql.VarChar, req.body.nombre_proyecto)
+        .input('descripcion', sql.Text, req.body.descripcion)
+        .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
+        .input('estado', sql.Int, req.body.estado)
+        .input('ced_responsable', sql.VarChar, req.body.ced_responsable)
+        .input("presupuesto", sql.Float, req.body.presupuesto)
+        .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
+        .query("UPDATE Proyectos SET nombre_proyecto = @nombre, descripcion = @descripcion, fechaInicio = @fecha_inicio, estado = @estado, ced_responsable = @ced_responsable, presupuesto = @presupuesto, recursosNecesarios = @recursosNecesarios WHERE idProyecto = @id_proyecto");
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+export const agregarColaborador = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const totalColaboradores = await pool.request().query('SELECT COUNT(*) AS count FROM colaboradores');
+        const result = await pool
+        .request()
+        .input('id_colaborador', sql.Int, totalColaboradores.recordset[0].count)
+        .input('cedula', sql.VarChar, req.body.cedula)
+        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .query("INSERT INTO colaboradores (ced_colaborador, idProyecto) VALUES (@cedula, @id_proyecto)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
