@@ -164,6 +164,7 @@ export const createProject = async (req, res) => {
         console.log(req.body);
         const pool = await getConnection()
         const totalproyectos = await pool.request().query('SELECT COUNT(*) AS count FROM Proyectos');
+        const idProyecto = totalproyectos.recordset[0].count
         const result = await pool
         .request()
         .input('id_proyecto', sql.Int, totalproyectos.recordset[0].count)
@@ -175,7 +176,7 @@ export const createProject = async (req, res) => {
         .input("presupuesto", sql.Float, req.body.presupuesto)
         .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
         .query("INSERT INTO Proyectos (idProyecto, nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@id_proyecto, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
-        res.status(200).json({ message: 'Registro exitoso' });
+        res.status(200).json({ message: 'Registro exitoso', idProyecto: idProyecto});
     } catch (error) {
         console.log("Error: ",error)
     }
@@ -223,6 +224,7 @@ export const updateProject = async (req, res) => {
     try {
         console.log(req.body);
         const pool = await getConnection();
+        const idProyecto = req.body.id_proyecto;
         const result = await pool
         .request()
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
@@ -234,7 +236,7 @@ export const updateProject = async (req, res) => {
         .input("presupuesto", sql.Float, req.body.presupuesto)
         .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
         .query("UPDATE Proyectos SET nombre_proyecto = @nombre, descripcion = @descripcion, fechaInicio = @fecha_inicio, estado = @estado, ced_responsable = @ced_responsable, presupuesto = @presupuesto, recursosNecesarios = @recursosNecesarios WHERE idProyecto = @id_proyecto");
-        res.status(200).json({ message: 'Registro exitoso' });
+        res.status(200).json({ message: 'Registro exitoso', idProyecto: idProyecto});
     } catch (error) {
         console.log("Error: ",error)
     }
@@ -250,6 +252,26 @@ export const agregarColaborador = async (req, res) => {
         .input('cedula', sql.VarChar, req.body.cedula)
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
         .query("INSERT INTO colaboradores (id, ced_colaborador, idProyecto) VALUES (@id_colaborador, @cedula, @id_proyecto)");
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+export const addTask = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const totalTareas = await pool.request().query('SELECT COUNT(*) AS count FROM tareas');
+        const result = await pool
+        .request()
+        .input('id_tarea', sql.Int, totalTareas.recordset[0].count)
+        .input('nombre', sql.VarChar, req.body.nombre)
+        .input('descripcion', sql.Text, req.body.descripcion)
+        .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
+        .input('estado', sql.Int, 0)
+        .input('ced_responsable', sql.VarChar, req.body.ced_responsable)
+        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .query("INSERT INTO tareas (idTarea, nombre, descripcion, fechaInicio, estado, cedEncargado, idProyecto) VALUES (@id_tarea, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @id_proyecto)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
