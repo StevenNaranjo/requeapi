@@ -277,3 +277,19 @@ export const addTask = async (req, res) => {
         console.log("Error: ",error)
     }
 }
+
+export const getTasks = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('idProyecto', sql.VarChar, req.body.idProyecto)
+        .query('SELECT * FROM tareas where idProyecto = @idProyecto');
+        const tasks = result.recordset;
+        console.log(tasks);
+        res.json(tasks);
+    } catch (error) {
+        console.log("Error: ",error)  
+    }
+}

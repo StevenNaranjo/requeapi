@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -19,6 +19,8 @@ router.post('/getProjects', getProjects)
 router.post('/createMeeting', createMeeting)
 router.put('/updateUser', updateUser)
 router.post('/addCollaborator', agregarColaborador)
+router.post('/addTask', addTask)
+router.post('/getTask', getTasks)
 export default router;
 
 
