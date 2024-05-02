@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.post('/login', loginUser);
 router.post('/register', registerUser);
 router.post('/createProject', createProject);
 router.get('/getProjects', getProjects)
-router.get('/getProject/:id', getProjects)
+router.get('/getProject/:id', getProject)
 router.post('/createMeeting', createMeeting)
 router.get('/getProjectsByEmail/:correo', getProjectsByEmail)
 router.put('/updateUser', updateUser)
