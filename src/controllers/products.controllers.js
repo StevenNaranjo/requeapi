@@ -230,6 +230,7 @@ export const getProjectsByEmail = async (req, res) => {
         const pool = await getConnection();
         const result = await pool
         .request()
+        .input('correo', sql.VarChar, correo)
         .query('select P.idProyecto, P.nombre_proyecto, p.descripcion, P.fechaInicio, P.estado, p.ced_responsable, u.correo  from Proyectos P left join usuarios U on U.cedula = P.ced_responsable where U.correo = @correo');
         const projects = result.recordset;
         console.log(projects);
