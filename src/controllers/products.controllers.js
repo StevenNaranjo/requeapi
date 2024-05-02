@@ -220,6 +220,24 @@ export const getProjects = async (req, res) => {
         console.log("Error: ",error)  
     }
 }
+
+export const getProjectsByEmail = async (req, res) => {
+    const correo = req.params.correo; // Obtenemos el correo del parámetro de la URL
+    console.log(correo)
+    const pool = await getConnection();
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .query('select P.idProyecto, P.nombre_proyecto, p.descripcion, P.fechaInicio, P.estado, p.ced_responsable, u.correo  from Proyectos P left join usuarios U on U.cedula = P.ced_responsable where U.correo = @correo');
+        const projects = result.recordset;
+        console.log(projects);
+        res.json(projects);
+    } catch (error) {
+        console.log("Error: ",error)  
+    }
+}
 export const updateProject = async (req, res) => {
     try {
         console.log(req.body);
