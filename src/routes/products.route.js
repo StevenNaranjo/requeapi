@@ -15,9 +15,9 @@ router.delete('/usuarios/:correo', deleteUser);
 router.post('/login', loginUser);
 router.post('/register', registerUser);
 router.post('/createProject', createProject);
-router.post('/getProjects', getProjects)
+router.get('/getProjects', getProjects)
 router.post('/createMeeting', createMeeting)
-router.post('/getProjectsByEmail/:correo', getProjectsByEmail)
+router.get('/getProjectsByEmail/:correo', getProjectsByEmail)
 router.put('/updateUser', updateUser)
 router.post('/addCollaborator', agregarColaborador)
 router.post('/addTask', addTask)
