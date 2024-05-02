@@ -16,6 +16,7 @@ router.post('/login', loginUser);
 router.post('/register', registerUser);
 router.post('/createProject', createProject);
 router.get('/getProjects', getProjects)
+router.get('/getProject/:id', getProjects)
 router.post('/createMeeting', createMeeting)
 router.get('/getProjectsByEmail/:correo', getProjectsByEmail)
 router.put('/updateUser', updateUser)
