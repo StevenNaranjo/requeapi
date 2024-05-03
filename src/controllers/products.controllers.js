@@ -71,17 +71,24 @@ export const createUser = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-    const pool = await getConnection()
+    try {
+        const pool = await getConnection();
 
-    const result = await pool
-    .request()
-    .input('correo', sql.VarChar, req.body.correo)
-    .input('cedula', sql.VarChar, req.body.cedula)
-    .input('telefono', sql.VarChar, req.body.telefono)
-    .input('departamento', sql.VarChar, req.body.departamento)
-    .query("UPDATE usuarios SET correo = @correo, telefono = @telefono, departamento = @departamento WHERE cedula = @cedula");
-    res.status(200).json({message: 'Modificando Usuario'});
+        const result = await pool
+            .request()
+            .input('correo', sql.VarChar, req.body.correo)
+            .input('cedula', sql.VarChar, req.body.cedula)
+            .input('telefono', sql.VarChar, req.body.telefono)
+            .input('departamento', sql.VarChar, req.body.departamento)
+            .query("UPDATE usuarios SET correo = @correo, telefono = @telefono, departamento = @departamento WHERE cedula = @cedula");
+
+        res.status(200).json({ message: 'Usuario Modificado' });
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        res.status(500).json({ message: 'Error al actualizar usuario' });
+    }
 }
+
 
 export const deleteUser = (req, res) => {
     res.send(`Eliminando Usuario ${req.params.correo}`);
