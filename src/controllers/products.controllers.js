@@ -327,12 +327,13 @@ export const addTask = async (req, res) => {
 }
 
 export const getTasks = async (req, res) => {
+    const idProyecto = req.params.idProyecto; 
     try {
         console.log(req.body);
         const pool = await getConnection();
         const result = await pool
         .request()
-        .input('idProyecto', sql.VarChar, req.body.idProyecto)
+        .input('idProyecto', sql.Int, idProyecto)
         .query('SELECT * FROM tareas where idProyecto = @idProyecto');
         const tasks = result.recordset;
         console.log(tasks);

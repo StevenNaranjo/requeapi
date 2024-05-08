@@ -22,7 +22,7 @@ router.get('/getProjectsByEmail/:correo', getProjectsByEmail)
 router.put('/updateUser', updateUser)
 router.post('/addCollaborator', agregarColaborador)
 router.post('/addTask', addTask)
-router.post('/getTask', getTasks)
+router.get('/getTask/:idProyecto', getTasks)
 export default router;
 
 
