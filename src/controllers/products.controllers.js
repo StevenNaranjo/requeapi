@@ -313,10 +313,13 @@ export const addTask = async (req, res) => {
         .input('nombre', sql.VarChar, req.body.nombre)
         .input('descripcion', sql.Text, req.body.descripcion)
         .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
-        .input('estado', sql.Int, 0)
-        .input('ced_responsable', sql.VarChar, req.body.ced_responsable)
+        .input('estado', sql.VarChar,  req.body.estado)
+        .input('ced_responsable', sql.VarChar, req.body.responsable)
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
-        .query("INSERT INTO tareas (idTarea, nombre, descripcion, fechaInicio, estado, cedEncargado, idProyecto) VALUES (@id_tarea, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @id_proyecto)");
+        .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
+        .input('storypoints', sql.Int, req.body.storypoints)
+        .input('recursos', sql.Text, req.body.recursos)
+        .query("INSERT INTO tareas (idTarea, idProyecto, nombre_Tarea, descripcion, responsable, estado, fechaInicio, tiempo_estimado, storypoints, recursos) VALUES (@id_tarea, @id_proyecto, @nombre,@descripcion,@ced_responsable,@estado,@fecha_inicio, @tiempo_estimado, @storypoints,@recursos)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
