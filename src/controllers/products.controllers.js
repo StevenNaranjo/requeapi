@@ -287,6 +287,8 @@ export const updateProject = async (req, res) => {
     }
 }
 export const agregarColaborador = async (req, res) => {
+    const idProyecto = req.params.idProyecto
+    const cedula = req.params.cedula
     try {
         console.log(req.body);
         const pool = await getConnection();
@@ -294,13 +296,29 @@ export const agregarColaborador = async (req, res) => {
         const result = await pool
         .request()
         .input('id_colaborador', sql.Int, totalColaboradores.recordset[0].count)
-        .input('cedula', sql.VarChar, req.body.cedula)
-        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .input('cedula', sql.VarChar, cedula)
+        .input('id_proyecto', sql.Int, idProyecto)
         .query("INSERT INTO colaboradores (id, ced_colaborador, idProyecto) VALUES (@id_colaborador, @cedula, @id_proyecto)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
     }
+}
+export const getColaborators = async(req, res) => {
+    const idProyecto = req.params.idProyecto;
+    try {
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('id_proyecto', sql.Int, idProyecto)
+        .query("Select * from colaboradores where idProyecto = @id_proyecto");
+        const colaboradores = result.recordset;
+        console.log(colaboradores);
+        res.json(colaboradores);
+    } catch (error) {
+        console.log("Error: ". error)
+    }
+
 }
 export const addTask = async (req, res) => {
     try {

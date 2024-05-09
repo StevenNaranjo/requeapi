@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -20,9 +20,10 @@ router.get('/getProject/:id', getProject)
 router.post('/createMeeting', createMeeting)
 router.get('/getProjectsByEmail/:correo', getProjectsByEmail)
 router.put('/updateUser', updateUser)
-router.post('/addCollaborator', agregarColaborador)
+router.post('/addCollaborator/:idProyecto/:cedula', agregarColaborador)
 router.post('/addTask', addTask)
 router.get('/getTask/:idProyecto', getTasks)
+router.get('/getColaboradores/:idProyecto', getColaborators)
 export default router;
 
 
