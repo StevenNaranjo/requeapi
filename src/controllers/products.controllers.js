@@ -265,6 +265,7 @@ export const getProjectsByEmail = async (req, res) => {
         console.log("Error: ",error)  
     }
 }
+
 export const updateProject = async (req, res) => {
     try {
         console.log(req.body);
@@ -299,6 +300,23 @@ export const agregarColaborador = async (req, res) => {
         .input('cedula', sql.VarChar, cedula)
         .input('id_proyecto', sql.Int, idProyecto)
         .query("INSERT INTO colaboradores (id, ced_colaborador, idProyecto) VALUES (@id_colaborador, @cedula, @id_proyecto)");
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+export const deleteCollaborator = async(req, res) => {
+    const idProyecto = req.params.idProyecto
+    const cedula = req.params.cedula
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const totalColaboradores = await pool.request().query('SELECT COUNT(*) AS count FROM colaboradores');
+        const result = await pool
+        .request()
+        .input('cedula', sql.VarChar, cedula)
+        .input('id_proyecto', sql.Int, idProyecto)
+        .query("DELETE FROM colaboradores WHERE ced_colaborador = @id_colaborador AND idProyecto = @id_proyecto");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)

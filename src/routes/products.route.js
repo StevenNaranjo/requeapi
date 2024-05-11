@@ -10,7 +10,7 @@ router.get('/usuarios/correo/:correo', getUserByEmail);
 router.post('/usuarios', createUser);
 router.put('/usuarios/:correo', updateUser);
 router.delete('/usuarios/:correo', deleteUser);
-
+router.delete('/deleteCollaborator/:idProyecto/:cedula')
 // Rutas para autenticación
 router.post('/login', loginUser);
 router.post('/register', registerUser);
