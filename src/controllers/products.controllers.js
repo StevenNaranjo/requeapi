@@ -248,7 +248,7 @@ export const getProject = async (req, res) => {
     }
 }
 export const getProjectsByEmail = async (req, res) => {
-    const correo = req.params.correo; // Obtenemos el correo del parámetro de la URL
+    const correo = req.params.correo; // Obtenemos el correo del parámetro de la URLdata
     console.log(correo)
     const pool = await getConnection();
     try {
@@ -257,7 +257,7 @@ export const getProjectsByEmail = async (req, res) => {
         const result = await pool
         .request()
         .input('correo', sql.VarChar, correo)
-        .query('select P.idProyecto, P.nombre_proyecto, p.descripcion, P.fechaInicio, P.estado, p.ced_responsable, P.Presupuesto,P.recursosNecesarios, u.correo  from Proyectos P left join usuarios U on U.cedula = P.ced_responsable where U.correo = @correo');
+        .query('select p.idProyecto, p.nombre_proyecto, p.descripcion, p.fechaInicio, p.estado, p.ced_responsable, p.presupuesto, p.recursosNecesarios from PROYECTOS P INNER JOIN COLABORADORES C ON C.idProyecto = P.idProyecto INNER JOIN USUARIOS U ON U.Cedula = C.ced_colaborador where U.correo = @correo');
         const projects = result.recordset;
         console.log(projects);
         res.json(projects);
@@ -378,3 +378,4 @@ export const getTasks = async (req, res) => {
         console.log("Error: ",error)  
     }
 }
+
