@@ -298,7 +298,7 @@ export const agregarColaborador = async (req, res) => {
         .input('id_colaborador', sql.Int, totalColaboradores.recordset[0].count)
         .input('cedula', sql.VarChar, cedula)
         .input('id_proyecto', sql.Int, idProyecto)
-        .query("INSERT INTO colaboradores (id, ced_colaborador, idProyecto) VALUES (@id_colaborador, @cedula, @id_proyecto)");
+        .query("INSERT INTO colaboradores ( ced_colaborador, idProyecto) VALUES (@cedula, @id_proyecto)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
