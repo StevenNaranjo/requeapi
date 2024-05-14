@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.get('/usuarios/correo/:correo', getUserByEmail);
 router.post('/usuarios', createUser);
 router.put('/usuarios/:correo', updateUser);
 router.delete('/usuarios/:correo', deleteUser);
-router.delete('/deleteCollaborator/:idProyecto/:cedula')
+router.delete('/deleteCollaborator/:idProyecto/:cedula', deleteCollaborator)
 // Rutas para autenticación
 router.post('/login', loginUser);
 router.post('/register', registerUser);

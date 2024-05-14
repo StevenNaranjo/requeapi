@@ -304,23 +304,22 @@ export const agregarColaborador = async (req, res) => {
         console.log("Error: ",error)
     }
 }
-export const deleteCollaborator = async(req, res) => {
-    const idProyecto = req.params.idProyecto
-    const cedula = req.params.cedula
+export const deleteCollaborator = async (req, res) => {
+    const idProyecto = req.params.idProyecto;
+    const cedula = req.params.cedula;
     try {
-        console.log(req.body);
         const pool = await getConnection();
-        const totalColaboradores = await pool.request().query('SELECT COUNT(*) AS count FROM colaboradores');
-        const result = await pool
-        .request()
-        .input('cedula', sql.VarChar, cedula)
-        .input('id_proyecto', sql.Int, idProyecto)
-        .query("DELETE FROM colaboradores WHERE ced_colaborador = @cedula AND idProyecto = @id_proyecto");
-        res.status(200).json({ message: 'Registro exitoso' });
+        const result = await pool.request()
+            .input('cedula', sql.VarChar, cedula)
+            .input('id_proyecto', sql.Int, idProyecto)
+            .query("DELETE FROM colaboradores WHERE ced_colaborador = @cedula AND idProyecto = @id_proyecto");
+        res.status(200).json({ message: 'Colaborador eliminado exitosamente' });
     } catch (error) {
-        console.log("Error: ",error)
+        console.error("Error:", error);
+        res.status(500).json({ message: 'Error al intentar eliminar el colaborador' });
     }
-}
+};
+
 export const getColaborators = async(req, res) => {
     const idProyecto = req.params.idProyecto;
     try {
