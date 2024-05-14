@@ -315,7 +315,7 @@ export const deleteCollaborator = async(req, res) => {
         .request()
         .input('cedula', sql.VarChar, cedula)
         .input('id_proyecto', sql.Int, idProyecto)
-        .query("DELETE FROM colaboradores WHERE ced_colaborador = @id_colaborador AND idProyecto = @id_proyecto");
+        .query("DELETE FROM colaboradores WHERE ced_colaborador = @cedula AND idProyecto = @id_proyecto");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
