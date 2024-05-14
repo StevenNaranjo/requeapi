@@ -344,7 +344,6 @@ export const addTask = async (req, res) => {
         const totalTareas = await pool.request().query('SELECT COUNT(*) AS count FROM tareas');
         const result = await pool
         .request()
-        .input('id_tarea', sql.Int, totalTareas.recordset[0].count)
         .input('nombre', sql.VarChar, req.body.nombre)
         .input('descripcion', sql.Text, req.body.descripcion)
         .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
@@ -354,7 +353,7 @@ export const addTask = async (req, res) => {
         .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
         .input('storypoints', sql.Int, req.body.storypoints)
         .input('recursos', sql.Text, req.body.recursos)
-        .query("INSERT INTO tareas (idTarea, idProyecto, nombre_Tarea, descripcion, responsable, estado, fechaInicio, tiempo_estimado, storypoints, recursos) VALUES (@id_tarea, @id_proyecto, @nombre,@descripcion,@ced_responsable,@estado,@fecha_inicio, @tiempo_estimado, @storypoints,@recursos)");
+        .query("INSERT INTO tareas (idProyecto, nombre_Tarea, descripcion, responsable, estado, fechaInicio, tiempo_estimado, storypoints, recursos) VALUES (@id_proyecto, @nombre,@descripcion,@ced_responsable,@estado,@fecha_inicio, @tiempo_estimado, @storypoints,@recursos)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
         console.log("Error: ",error)
