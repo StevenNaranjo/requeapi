@@ -174,7 +174,6 @@ export const createProject = async (req, res) => {
         const idProyecto = totalproyectos.recordset[0].count
         const result = await pool
         .request()
-        .input('id_proyecto', sql.Int, totalproyectos.recordset[0].count)
         .input('nombre', sql.VarChar, req.body.nombre_proyecto)
         .input('descripcion', sql.Text, req.body.descripcion)
         .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
@@ -182,7 +181,7 @@ export const createProject = async (req, res) => {
         .input('ced_responsable', sql.VarChar, req.body.ced_responsable)
         .input("presupuesto", sql.Float, req.body.presupuesto)
         .input("recursosNecesarios", sql.Text, req.body.recursosNecesarios)
-        .query("INSERT INTO Proyectos (idProyecto, nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@id_proyecto, @nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
+        .query("INSERT INTO Proyectos (nombre_proyecto, descripcion, fechaInicio, estado, ced_responsable, presupuesto, recursosNecesarios) VALUES (@nombre, @descripcion, @fecha_inicio, @estado, @ced_responsable, @presupuesto, @recursosNecesarios)")
         res.status(200).json({ message: 'Registro exitoso', idProyecto: idProyecto});
     } catch (error) {
         console.log("Error: ",error)
