@@ -218,7 +218,7 @@ export const getProjects = async (req, res) => {
         const result = await pool
         .request()
         .input('cedula', sql.VarChar, req.body.cedula)
-        .query('SELECT P.* FROM proyectos');
+        .query('SELECT * FROM proyectos');
         const projects = result.recordset;
         console.log(projects);
         res.json(projects);
