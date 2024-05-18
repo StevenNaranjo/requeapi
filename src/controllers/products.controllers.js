@@ -376,3 +376,73 @@ export const getTasks = async (req, res) => {
     }
 }
 
+export const updateTask = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const idTarea = req.params.idTarea;
+        const result = await pool
+        .request()
+        .input('id_tarea', sql.Int, req.body.id_tarea)
+        .input('nombre', sql.VarChar, req.body.nombre)
+        .input('descripcion', sql.Text, req.body.descripcion)
+        .input('fecha_inicio', sql.VarChar, req.body.fecha_inicio)
+        .input('estado', sql.VarChar,  req.body.estado)
+        .input('ced_responsable', sql.VarChar, req.body.responsable)
+        .input('id_proyecto', sql.Int, req.body.id_proyecto)
+        .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
+        .input('storypoints', sql.Int, req.body.storypoints)
+        .input('recursos', sql.Text, req.body.recursos)
+        .query("UPDATE tareas SET nombre_Tarea = @nombre, descripcion = @descripcion, responsable = @ced_responsable, estado = @estado, fechaInicio = @fecha_inicio, tiempo_estimado = @tiempo_estimado, storypoints = @storypoints, recursos = @recursos WHERE idTarea = @id_tarea");
+        res.status(200).json({ message: 'Tarea actualizada correctamente', idTarea: idTarea});
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+
+export const deleteTask = async (req, res) => {
+    const idTarea = req.params.idTarea;
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .input('id_tarea', sql.Int, idTarea)
+            .query("DELETE FROM tareas WHERE idTarea = @id_tarea");
+        res.status(200).json({ message: 'Tarea eliminada exitosamente' });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: 'Error al intentar eliminar la tarea' });
+    }
+}
+
+
+export const createMessage = async (req, res) => {
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('idProyecto', sql.Int, req.params.idProyecto)
+        .input('nombreColaborador', sql.VarChar, req.body.nombreColaborador)
+        .input('mensaje', sql.Text, req.body.mensaje)
+        .query("INSERT INTO mensaje (idProyecto, nombreColaborador, mensaje) VALUES (@idProyecto, @nombreColaborador, @mensaje)");
+        res.status(200).json({ message: 'Registro exitoso' });
+    } catch (error) {
+        console.log("Error: ",error)
+    }
+}
+export const getMessages = async (req, res) => {
+    const idProyecto = req.params.idProyecto; 
+    try {
+        console.log(req.body);
+        const pool = await getConnection();
+        const result = await pool
+        .request()
+        .input('idProyecto', sql.Int, idProyecto)
+        .query('SELECT * FROM mensaje where idProyecto = @idProyecto');
+        const messages = result.recordset;
+        console.log(messages);
+        res.json(messages);
+    } catch (error) {
+        console.log("Error: ",error)  
+    }
+}

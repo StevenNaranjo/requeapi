@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator, updateTask, deleteTask, createMessage, getMessages } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -24,6 +24,10 @@ router.post('/addCollaborator/:idProyecto/:cedula', agregarColaborador)
 router.post('/addTask', addTask)
 router.get('/getTask/:idProyecto', getTasks)
 router.get('/getColaboradores/:idProyecto', getColaborators)
+router.put('/updateTask/:idTarea', updateTask)
+router.delete('/deleteTask/:idTarea', deleteTask)
+router.post('/createMessage/:idProyecto', createMessage)
+router.get('/getMessages/:idProyecto', getMessages)
 export default router;
 
 
