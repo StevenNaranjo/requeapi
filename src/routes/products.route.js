@@ -28,10 +28,10 @@ router.put('/updateTask/:idTarea', updateTask)
 router.delete('/deleteTask/:idTarea', deleteTask)
 router.post('/createMessage/:idProyecto', createMessage)
 router.get('/getMessages/:idProyecto', getMessages)
-app.get('/highest-resources', getProjectWithHighestResources);
-app.get('/average-resources', getAverageResourcesPerProject);
-app.get('/average-time/:idProyecto', getAverageTimeForProjectTasks);
-app.get('/average-time', getAverageTimeForAllTasks);
+router.get('/highest-resources', getProjectWithHighestResources);
+router.get('/average-resources', getAverageResourcesPerProject);
+router.get('/average-time/:idProyecto', getAverageTimeForProjectTasks);
+router.get('/average-time', getAverageTimeForAllTasks);
 export default router;
 
 
