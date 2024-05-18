@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator, updateTask, deleteTask, createMessage, getMessages } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator, updateTask, deleteTask, createMessage, getMessages, getAverageTimeForAllTasks, getAverageTimeForProjectTasks, getAverageResourcesPerProject, getProjectWithHighestResources } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -28,6 +28,10 @@ router.put('/updateTask/:idTarea', updateTask)
 router.delete('/deleteTask/:idTarea', deleteTask)
 router.post('/createMessage/:idProyecto', createMessage)
 router.get('/getMessages/:idProyecto', getMessages)
+app.get('/highest-resources', getProjectWithHighestResources);
+app.get('/average-resources', getAverageResourcesPerProject);
+app.get('/average-time/:idProyecto', getAverageTimeForProjectTasks);
+app.get('/average-time', getAverageTimeForAllTasks);
 export default router;
 
 

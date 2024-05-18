@@ -446,3 +446,85 @@ export const getMessages = async (req, res) => {
         console.log("Error: ",error)  
     }
 }
+
+export const getProjectWithHighestResources = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .query(`SELECT TOP 1 
+                        p.idProyecto,
+                        SUM(CAST(t.recursos AS FLOAT)) AS total_recursos
+                    FROM 
+                        Proyectos p
+                    JOIN 
+                        tareas t ON p.idProyecto = t.idProyecto
+                    GROUP BY 
+                        p.idProyecto
+                    ORDER BY 
+                        total_recursos DESC`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+};
+export const getAverageResourcesPerProject = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .query(`SELECT 
+                        p.nombre_proyecto,
+                        AVG(CAST(t.recursos AS FLOAT)) AS promedio_recursos
+                    FROM 
+                        Proyectos p
+                    JOIN 
+                        tareas t ON p.idProyecto = t.idProyecto
+                    GROUP BY 
+                        p.nombre_proyecto`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+};
+export const getAverageTimeForProjectTasks = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .input('idProyecto', sql.Int, req.params.idProyecto)
+            .query(`SELECT 
+                        p.nombre_proyecto,
+                        AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
+                    FROM 
+                        Proyectos p
+                    JOIN 
+                        tareas t ON p.idProyecto = t.idProyecto
+                    WHERE 
+                        p.idProyecto = @idProyecto
+                    GROUP BY 
+                        p.nombre_proyecto`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+};
+export const getAverageTimeForAllTasks = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .query(`SELECT 
+                        p.nombre_proyecto,
+                        AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
+                    FROM 
+                        Proyectos p
+                    JOIN 
+                        tareas t ON p.idProyecto = t.idProyecto
+                    GROUP BY 
+                        p.nombre_proyecto`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+};
