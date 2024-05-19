@@ -460,7 +460,7 @@ export const getProjectWithHighestResources = async (req, res) => {
                     JOIN 
                         tareas t ON p.idProyecto = t.idProyecto
                     GROUP BY 
-                        p.idProyecto
+                        p.idProyecto, p.nombre_proyecto
                     ORDER BY 
                         total_recursos DESC`);
         res.status(200).json(result.recordset);
