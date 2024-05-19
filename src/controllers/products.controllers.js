@@ -351,7 +351,7 @@ export const addTask = async (req, res) => {
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
         .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
         .input('storypoints', sql.Int, req.body.storypoints)
-        .input('recursos', sql.Text, req.body.recursos)
+        .input('recursos', sql.Int, req.body.recursos)
         .query("INSERT INTO tareas (idProyecto, nombre_Tarea, descripcion, responsable, estado, fechaInicio, tiempo_estimado, storypoints, recursos) VALUES (@id_proyecto, @nombre,@descripcion,@ced_responsable,@estado,@fecha_inicio, @tiempo_estimado, @storypoints,@recursos)");
         res.status(200).json({ message: 'Registro exitoso' });
     } catch (error) {
