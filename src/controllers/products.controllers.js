@@ -453,7 +453,7 @@ export const getProjectWithHighestResources = async (req, res) => {
         const result = await pool.request()
             .query(`SELECT TOP 1 
                         p.idProyecto,
-                        p.nombre_proyecto,
+                        p.nombre_proyecto as nombreProyecto,
                         SUM(CAST(t.recursos AS FLOAT)) AS total_recursos
                     FROM 
                         Proyectos p
