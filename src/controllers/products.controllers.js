@@ -392,7 +392,7 @@ export const updateTask = async (req, res) => {
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
         .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
         .input('storypoints', sql.Int, req.body.storypoints)
-        .input('recursos', sql.Text, req.body.recursos)
+        .input('recursos', sql.Int, req.body.recursos)
         .query("UPDATE tareas SET nombre_Tarea = @nombre, descripcion = @descripcion, responsable = @ced_responsable, estado = @estado, fechaInicio = @fecha_inicio, tiempo_estimado = @tiempo_estimado, storypoints = @storypoints, recursos = @recursos WHERE idTarea = @id_tarea");
         res.status(200).json({ message: 'Tarea actualizada correctamente', idTarea: idTarea});
     } catch (error) {
