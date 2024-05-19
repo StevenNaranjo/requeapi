@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator, updateTask, deleteTask, createMessage, getMessages, getAverageTimeForAllTasks, getAverageTimeForProjectTasks, getAverageResourcesPerProject, getProjectWithHighestResources } from '../controllers/products.controllers.js';
+import { createProject, createUser, deleteUser, getProjects, getUser, getUserByEmail, getUsers, loginUser, registerUser, updateUser, createMeeting, agregarColaborador, addTask, getTasks, getProjectsByEmail, getProject, getColaborators, deleteCollaborator, updateTask, deleteTask, createMessage, getMessages, getAverageTimeForAllTasks, getAverageTimeForProjectTasks, getAverageResourcesPerProject, getProjectWithHighestResources, getAverageResourcesOneProject } from '../controllers/products.controllers.js';
 
 const router = Router();
 
@@ -30,6 +30,7 @@ router.post('/createMessage/:idProyecto', createMessage)
 router.get('/getMessages/:idProyecto', getMessages)
 router.get('/highest-resources', getProjectWithHighestResources);
 router.get('/average-resources', getAverageResourcesPerProject);
+router.get('/average-resources/:idProyecto', getAverageResourcesOneProject);
 router.get('/average-time/:idProyecto', getAverageTimeForProjectTasks);
 router.get('/average-time', getAverageTimeForAllTasks);
 export default router;

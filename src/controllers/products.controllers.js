@@ -510,6 +510,30 @@ export const getAverageTimeForProjectTasks = async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     }
 };
+
+export const getAverageResourcesOneProject = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+            .input('idProyecto', sql.Int, req.params.idProyecto)
+            .query(`SELECT 
+                        p.nombre_proyecto as nombreProyecto,
+                        AVG(CAST(t.recursos AS FLOAT)) AS promedio_recursos
+                    FROM 
+                        Proyectos p
+                    JOIN 
+                        tareas t ON p.idProyecto = t.idProyecto
+                    WHERE 
+                        p.idProyecto = @idProyecto
+                    GROUP BY 
+                        p.nombre_proyecto`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+
+}
 export const getAverageTimeForAllTasks = async (req, res) => {
     try {
         const pool = await getConnection();
