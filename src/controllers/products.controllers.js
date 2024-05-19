@@ -453,6 +453,7 @@ export const getProjectWithHighestResources = async (req, res) => {
         const result = await pool.request()
             .query(`SELECT TOP 1 
                         p.idProyecto,
+                        p.nombre_proyecto,
                         SUM(CAST(t.recursos AS FLOAT)) AS total_recursos
                     FROM 
                         Proyectos p
@@ -473,7 +474,7 @@ export const getAverageResourcesPerProject = async (req, res) => {
         const pool = await getConnection();
         const result = await pool.request()
             .query(`SELECT 
-                        p.nombre_proyecto,
+                        p.nombre_proyecto as nombre_proyecto,
                         AVG(CAST(t.recursos AS FLOAT)) AS promedio_recursos
                     FROM 
                         Proyectos p
@@ -493,7 +494,7 @@ export const getAverageTimeForProjectTasks = async (req, res) => {
         const result = await pool.request()
             .input('idProyecto', sql.Int, req.params.idProyecto)
             .query(`SELECT 
-                        p.nombre_proyecto,
+                        p.nombre_proyecto as nombre_proyecto,
                         AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
                     FROM 
                         Proyectos p
@@ -514,7 +515,7 @@ export const getAverageTimeForAllTasks = async (req, res) => {
         const pool = await getConnection();
         const result = await pool.request()
             .query(`SELECT 
-                        p.nombre_proyecto,
+                        p.nombre_proyecto as nombre_proyecto,
                         AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
                     FROM 
                         Proyectos p
