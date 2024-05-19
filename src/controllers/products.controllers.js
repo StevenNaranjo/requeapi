@@ -349,7 +349,7 @@ export const addTask = async (req, res) => {
         .input('estado', sql.VarChar,  req.body.estado)
         .input('ced_responsable', sql.VarChar, req.body.responsable)
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
-        .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
+        .input('tiempo_estimado', sql.Int, req.body.tiempo_estimado)
         .input('storypoints', sql.Int, req.body.storypoints)
         .input('recursos', sql.Int, req.body.recursos)
         .query("INSERT INTO tareas (idProyecto, nombre_Tarea, descripcion, responsable, estado, fechaInicio, tiempo_estimado, storypoints, recursos) VALUES (@id_proyecto, @nombre,@descripcion,@ced_responsable,@estado,@fecha_inicio, @tiempo_estimado, @storypoints,@recursos)");
@@ -390,7 +390,7 @@ export const updateTask = async (req, res) => {
         .input('estado', sql.VarChar,  req.body.estado)
         .input('ced_responsable', sql.VarChar, req.body.responsable)
         .input('id_proyecto', sql.Int, req.body.id_proyecto)
-        .input('tiempo_estimado', sql.VarChar, req.body.tiempo_estimado)
+        .input('tiempo_estimado', sql.Int, req.body.tiempo_estimado)
         .input('storypoints', sql.Int, req.body.storypoints)
         .input('recursos', sql.Int, req.body.recursos)
         .query("UPDATE tareas SET nombre_Tarea = @nombre, descripcion = @descripcion, responsable = @ced_responsable, estado = @estado, fechaInicio = @fecha_inicio, tiempo_estimado = @tiempo_estimado, storypoints = @storypoints, recursos = @recursos WHERE idTarea = @id_tarea");
@@ -474,7 +474,7 @@ export const getAverageResourcesPerProject = async (req, res) => {
         const pool = await getConnection();
         const result = await pool.request()
             .query(`SELECT 
-                        p.nombre_proyecto as nombre_proyecto,
+                        p.nombre_proyecto as nombreProyecto,
                         AVG(CAST(t.recursos AS FLOAT)) AS promedio_recursos
                     FROM 
                         Proyectos p
@@ -494,7 +494,7 @@ export const getAverageTimeForProjectTasks = async (req, res) => {
         const result = await pool.request()
             .input('idProyecto', sql.Int, req.params.idProyecto)
             .query(`SELECT 
-                        p.nombre_proyecto as nombre_proyecto,
+                        p.nombre_proyecto as nombreProyecto,
                         AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
                     FROM 
                         Proyectos p
@@ -515,7 +515,7 @@ export const getAverageTimeForAllTasks = async (req, res) => {
         const pool = await getConnection();
         const result = await pool.request()
             .query(`SELECT 
-                        p.nombre_proyecto as nombre_proyecto,
+                        p.nombre_proyecto as nombreProyecto,
                         AVG(CAST(t.tiempo_estimado AS FLOAT)) AS promedio_tiempo
                     FROM 
                         Proyectos p
